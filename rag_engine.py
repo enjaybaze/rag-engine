@@ -64,7 +64,12 @@ def perform_rag_generation(
 
     # Check for existing corpuses
     print(f"Looking for existing RAG corpus with display name: {corpus_display_name}")
-    rag_corpora = rag.list_corpora(display_name_filter=[corpus_display_name])
+    # List all corpora and filter client-side for compatibility with older SDK versions.
+    # For more efficient server-side filtering, consider upgrading google-cloud-aiplatform.
+    print("Listing all available RAG corpora (client-side filtering will be applied)...")
+    all_corpora = rag.list_corpora()
+    rag_corpora = [corpus for corpus in all_corpora if corpus.display_name == corpus_display_name]
+    print(f"Found {len(rag_corpora)} corpora matching display name '{corpus_display_name}' after client-side filtering.")
 
     rag_corpus = None
     if rag_corpora:
