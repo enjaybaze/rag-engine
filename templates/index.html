@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Vertex AI RAG Interface</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Vertex AI RAG Engine Interface</h1>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <ul class="flashes">
+            {% for category, message in messages %}
+              <li class="flash-{{ category }}">{{ message }}</li>
+            {% endfor %}
+            </ul>
+          {% endif %}
+        {% endwith %}
+
+        <form method="POST" action="{{ url_for('process_request') }}" enctype="multipart/form-data">
+
+            <fieldset class="form-section">
+                <legend><h2>Step 1: Document Upload</h2></legend>
+                <p>Your GCP Project for GCS Upload: <strong>{{ project_id_env if project_id_env != 'your-gcp-project-id' else 'Not Configured (Set PROJECT_ID env var)' }}</strong></p>
+                <p>Target GCS Bucket: <strong>{{ gcs_bucket_env if gcs_bucket_env != 'your-gcs-bucket-name' else 'Not Configured (Set GCS_BUCKET_NAME env var)' }}</strong></p>
+
+                <div>
+                    <label for="file">Select Document for RAG Corpus:</label>
+                    <input type="file" name="file" id="file" required>
+                </div>
+            </fieldset>
+
+            <fieldset class="form-section">
+                <legend><h2>Step 2: Model Configuration</h2></legend>
+                <div>
+                    <label for="model_type">Choose Model Type:</label>
+                    <select name="model_type" id="model_type">
+                        <option value="gemini" {% if model_type_selected == 'gemini' %}selected{% endif %}>Gemini (Vertex AI - Recommended)</option>
+                        <option value="self-deployed" {% if model_type_selected == 'self-deployed' %}selected{% endif %}>Self-Deployed (Vertex AI Endpoint)</option>
+                    </select>
+                </div>
+
+                <div id="self_deployed_fields" style="display: {% if model_type_selected == 'self-deployed' %}block{% else %}none{% endif %};">
+                    <h3>Self-Deployed Endpoint Details</h3>
+                    <div id="project_id_field">
+                        <label for="project_id">Vertex AI Project ID (for RAG model):</label>
+                        <input type="text" name="project_id" id="project_id" value="{{ sd_project_id if sd_project_id else project_id_env if project_id_env != 'your-gcp-project-id' else '' }}" placeholder="e.g., your-gcp-project-id">
+                    </div>
+                    <div id="location_field">
+                        <label for="location">Vertex AI Location (Region):</label>
+                        <input type="text" name="location" id="location" value="{{ sd_location if sd_location else 'us-central1' }}" placeholder="e.g., us-central1">
+                    </div>
+                    <div id="endpoint_id_field">
+                        <label for="endpoint_id">Vertex AI Endpoint ID:</label>
+                        <input type="text" name="endpoint_id" id="endpoint_id" value="{{ sd_endpoint_id if sd_endpoint_id else '' }}" placeholder="e.g., 1234567890123456789">
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset class="form-section">
+                <legend><h2>Step 3: Enter Your Prompt</h2></legend>
+                <div>
+                    <label for="prompt_input">Prompt:</label>
+                    <textarea name="prompt_input" id="prompt_input" rows="5" required placeholder="e.g., What are the main advantages of using Retrieval Augmented Generation based on the uploaded document?">{{ prompt_input_value if prompt_input_value else '' }}</textarea>
+                </div>
+            </fieldset>
+
+            <div class="form-section" style="text-align: center;">
+                <input type="submit" value="Process with RAG">
+            </div>
+        </form>
+
+        <div class="form-section">
+            <h2>Step 4: Response</h2>
+            <div id="response_area">
+                {% if response_text %}
+                    <p>{{ response_text }}</p>
+                {% else %}
+                    <p><em>The model's response will appear here...</em></p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
