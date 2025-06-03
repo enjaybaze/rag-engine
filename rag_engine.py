@@ -114,24 +114,29 @@ def perform_rag_generation(
                 ),
                 max_embedding_requests_per_min=1000, # Adjust as needed
             )
-            # Use operation.name for LRO logging
-            print(f"File import operation started: {import_op.operation.name}. Waiting for completion (this may take several minutes)...")
+            lro_name = "unknown_lro" # Default in case operation.name access fails
+            try:
+                lro_name = import_op.operation.name
+            except AttributeError as e_attr:
+                print(f"Warning: Could not access import_op.operation.name: {e_attr}. Using default LRO name for logging.")
+
+            print(f"File import operation started: {lro_name}. Waiting for completion (this may take several minutes)...")
 
             timeout_seconds = 360 # 6 minutes, increased timeout
             import_op.wait(timeout=timeout_seconds) # Use the wait() method with timeout
 
-            print(f"File import operation {import_op.operation.name} finished waiting.")
+            print(f"File import operation {lro_name} finished waiting.")
             if import_op.done():
                 # Explicitly get the result. This might raise an error if parsing fails
                 # or if the operation itself had an error not caught by wait().
                 operation_result = import_op.result()
-                print(f"File import operation {import_op.operation.name} successfully resulted in: {type(operation_result)}")
+                print(f"File import operation {lro_name} successfully resulted in: {type(operation_result)}")
                 # If operation_result has specific fields you expect, log them cautiously.
                 # For ImportRagFilesResponse, typical fields are 'imported_rag_files_count' or similar.
                 # e.g. if hasattr(operation_result, 'imported_rag_files_count'):
                 #    print(f"Imported files count: {operation_result.imported_rag_files_count}")
             else: # Timeout occurred
-                error_msg = f"File import timed out after {timeout_seconds} seconds for operation {import_op.operation.name}. The operation may still be running."
+                error_msg = f"File import timed out after {timeout_seconds} seconds for operation {lro_name}. The operation may still be running."
                 print(error_msg)
                 return None, error_msg
 
@@ -142,10 +147,8 @@ def perform_rag_generation(
             if hasattr(e_import, 'errors'):
                 print(f"Google API Errors: {e_import.errors}")
 
-            if hasattr(e_import, 'message'): # For common GoogleAPICallError
-                error_msg = f"Error during file import to corpus '{rag_corpus.name}': {e_import.message}. Check GCS permissions, file formats, and Vertex AI service limits. Original error type: {type(e_import).__name__}"
-            else:
-                error_msg = f"Error during file import to corpus '{rag_corpus.name}': {e_import}. Check GCS permissions, file formats, and Vertex AI service limits. Original error type: {type(e_import).__name__}"
+            e_import_message = e_import.message if hasattr(e_import, 'message') else str(e_import)
+            error_msg = f"Error during file import to corpus '{rag_corpus.name}' (Operation: {lro_name}): {e_import_message}. Check GCS permissions, file formats, and Vertex AI service limits. Original error type: {type(e_import).__name__}"
             print(error_msg)
             return None, error_msg
     else:
