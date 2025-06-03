@@ -78,23 +78,24 @@ def perform_rag_generation(
                 publisher_model="publishers/google/models/text-embedding-004" # text-embedding-004 is a common choice
             )
         )
+        # Outer try removed here. The 'try' below is for the rag.create_corpus call.
         try:
-            try:
-                rag_corpus = rag.create_corpus(
-                    display_name=corpus_display_name,
-                    backend_config=rag.RagVectorDbConfig(
-                        rag_embedding_model_config=embedding_model_config
-                    ),
-                )
-                print(f"Created new RAG corpus: {rag_corpus.name}")
-            except Exception as e_create_corpus: # Catching google.api_core.exceptions.GoogleAPIError or similar
-                error_msg = f"Error creating RAG corpus '{corpus_display_name}': {e_create_corpus}. This could be due to naming conflicts, permissions, or invalid configuration."
-                print(error_msg)
-                return None, error_msg
+            rag_corpus = rag.create_corpus(
+                display_name=corpus_display_name,
+                backend_config=rag.RagVectorDbConfig(
+                    rag_embedding_model_config=embedding_model_config
+                ),
+            )
+            print(f"Created new RAG corpus: {rag_corpus.name}")
+        except Exception as e_create_corpus: # Catching google.api_core.exceptions.GoogleAPIError or similar
+            error_msg = f"Error creating RAG corpus '{corpus_display_name}': {e_create_corpus}. This could be due to naming conflicts, permissions, or invalid configuration."
+            print(error_msg)
+            return None, error_msg
 
-    if not rag_corpus:
+    if not rag_corpus: # This 'if' statement is now correctly positioned relative to the corpus creation logic
         # This case should ideally be caught by the error handling above if creation fails.
-        return None, "Fatal: Could not create or find RAG corpus and no specific error was caught."
+        # However, if rag_corpus remains None due to an unexpected path not caught by the try-except, this is a fallback.
+        return None, "Fatal: Could not create or find RAG corpus. The corpus object is None after creation attempt."
 
     # 2. Import Files to the RagCorpus
     if gcs_document_paths:
@@ -222,13 +223,16 @@ if __name__ == '__main__':
         test_prompt = "What is RAG and why is it helpful based on the provided document?"
 
         print(f"\n--- Test Case 1: Gemini Model ---")
-        gemini_response = perform_rag_generation(
+        gemini_response_text, gemini_error = perform_rag_generation(
             gcs_document_paths=[test_gcs_path],
             model_choice='gemini',
             prompt_text=test_prompt,
             corpus_display_name="test_corpus_gemini_rag_engine" # Use a distinct name for testing
         )
-        print(f"\nGemini Model Response:\n{gemini_response}")
+        if gemini_error:
+            print(f"Gemini Model Error:\n{gemini_error}")
+        else:
+            print(f"\nGemini Model Response:\n{gemini_response_text}")
 
         # --- Test Case 2: Self-Deployed Model (Optional - requires a deployed endpoint) ---
         # Replace with your actual self-deployed endpoint details if you have one
@@ -243,14 +247,17 @@ if __name__ == '__main__':
         #         'LOCATION': TEST_SELF_DEPLOYED_LOCATION,
         #         'ENDPOINT_ID': TEST_SELF_DEPLOYED_ENDPOINT_ID
         #     }
-        #     self_deployed_response = perform_rag_generation(
+        #     sd_response_text, sd_error = perform_rag_generation(
         #         gcs_document_paths=[test_gcs_path],
         #         model_choice='self-deployed',
         #         prompt_text=test_prompt,
         #         self_deployed_params=self_deployed_params_test,
         #         corpus_display_name="test_corpus_self_deployed_rag_engine" # Distinct name
         #     )
-        #     print(f"\nSelf-Deployed Model Response:\n{self_deployed_response}")
+        #     if sd_error:
+        #         print(f"Self-Deployed Model Error:\n{sd_error}")
+        #     else:
+        #         print(f"\nSelf-Deployed Model Response:\n{sd_response_text}")
         # else:
         #     print("\nSkipping Self-Deployed Model test case as TEST_SELF_DEPLOYED_ENDPOINT_ID is not set.")
 
