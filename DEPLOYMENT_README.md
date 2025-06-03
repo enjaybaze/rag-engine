@@ -102,9 +102,27 @@ Before you begin, ensure you have the following installed:
     ```
     You should see the Vertex AI RAG Engine interface.
 
+### Using the `local_install.sh` script (Recommended for Linux/macOS)
+
+For convenience, a shell script `local_install.sh` is provided to automate many of the setup steps above on Linux and macOS systems.
+
+1.  **Make the script executable**:
+    ```bash
+    chmod +x local_install.sh
+    ```
+2.  **Review the script (Optional but Recommended)**:
+    Open `local_install.sh` in a text editor to understand the commands it will run.
+3.  **Run the script**:
+    ```bash
+    ./local_install.sh
+    ```
+The script will guide you through creating a virtual environment, installing dependencies, and remind you to set necessary environment variables and run `gcloud auth application-default login`. It does not set environment variables globally or run the Flask app directly, allowing you to do so in your current shell session.
+
 ## Google Cloud Run Deployment Instructions
 
 This section describes how to deploy the application to Google Cloud Run, a serverless platform.
+
+**Note**: A shell script `cloudrun_deploy.sh` is provided to automate the Cloud Build and Cloud Run deployment steps. If using the script, ensure you first make it executable (`chmod +x cloudrun_deploy.sh`) and **edit the user configuration variables at the top of the script** (`PROJECT_ID`, `REGION`, `APP_NAME`, `GCS_BUCKET_NAME`, etc.) before running it with `./cloudrun_deploy.sh`. The manual steps below are what the script automates.
 
 ### Prerequisites for Cloud Run Deployment
 
