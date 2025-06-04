@@ -114,41 +114,34 @@ def perform_rag_generation(
                 ),
                 max_embedding_requests_per_min=1000, # Adjust as needed
             )
-            lro_name = "unknown_lro" # Default in case operation.name access fails
-            try:
-                lro_name = import_op.operation.name
-            except AttributeError as e_attr:
-                print(f"Warning: Could not access import_op.operation.name: {e_attr}. Using default LRO name for logging.")
+            # Assuming rag.import_files() is now synchronous or its LRO handling is managed by the SDK transparently,
+            # or we are treating it as a direct response object (e.g., ImportRagFilesResponse).
+            print(f"Call to rag.import_files() completed for corpus {rag_corpus.name}.")
+            print(f"Type of response object from import_files: {type(import_op)}")
 
-            print(f"File import operation started: {lro_name}. Waiting for completion (this may take several minutes)...")
+            # Cautiously log attributes that might exist on an ImportRagFilesResponse object
+            if hasattr(import_op, 'imported_files_count'): # Note: Attribute name might differ, e.g. imported_rag_files_count
+                print(f"Imported files count (from response object): {import_op.imported_files_count}")
+            elif hasattr(import_op, 'imported_rag_files_count'):
+                 print(f"Imported RAG files count (from response object): {import_op.imported_rag_files_count}")
 
-            timeout_seconds = 360 # 6 minutes, increased timeout
-            import_op.wait(timeout=timeout_seconds) # Use the wait() method with timeout
+            if hasattr(import_op, 'failed_files_count'): # Note: Attribute name might differ
+                print(f"Failed files count (from response object): {import_op.failed_files_count}")
+            elif hasattr(import_op, 'failed_rag_files_count'):
+                 print(f"Failed RAG files count (from response object): {import_op.failed_rag_files_count}")
 
-            print(f"File import operation {lro_name} finished waiting.")
-            if import_op.done():
-                # Explicitly get the result. This might raise an error if parsing fails
-                # or if the operation itself had an error not caught by wait().
-                operation_result = import_op.result()
-                print(f"File import operation {lro_name} successfully resulted in: {type(operation_result)}")
-                # If operation_result has specific fields you expect, log them cautiously.
-                # For ImportRagFilesResponse, typical fields are 'imported_rag_files_count' or similar.
-                # e.g. if hasattr(operation_result, 'imported_rag_files_count'):
-                #    print(f"Imported files count: {operation_result.imported_rag_files_count}")
-            else: # Timeout occurred
-                error_msg = f"File import timed out after {timeout_seconds} seconds for operation {lro_name}. The operation may still be running."
-                print(error_msg)
-                return None, error_msg
+            # If the operation failed and returned a specific error structure within the response object,
+            # you might inspect it here. However, typically errors would raise exceptions.
+            print(f"File import process for corpus '{rag_corpus.name}' finished processing.")
 
-        except Exception as e_import: # Catches errors from import_files or wait() or result()
+        except Exception as e_import:
             print(f"Caught exception during file import: {type(e_import)}")
             print(f"Exception details: {e_import}")
-            # If possible and safe, inspect attributes of e_import, e.g., if it's a GoogleAPIError
-            if hasattr(e_import, 'errors'):
+            if hasattr(e_import, 'errors'): # For GoogleAPIError
                 print(f"Google API Errors: {e_import.errors}")
 
             e_import_message = e_import.message if hasattr(e_import, 'message') else str(e_import)
-            error_msg = f"Error during file import to corpus '{rag_corpus.name}' (Operation: {lro_name}): {e_import_message}. Check GCS permissions, file formats, and Vertex AI service limits. Original error type: {type(e_import).__name__}"
+            error_msg = f"Error during file import to corpus '{rag_corpus.name}': {e_import_message}. Check GCS permissions, file formats, and Vertex AI service limits. Original error type: {type(e_import).__name__}"
             print(error_msg)
             return None, error_msg
     else:
