@@ -1,0 +1,6 @@
+Flask>=2.0
+google-cloud-storage>=2.0.0
+# google-cloud-aiplatform >=1.38.0 needed for display_name_filter in rag.list_corpora()
+# Using >=1.47.0 for recent features and fixes.
+google-cloud-aiplatform>=1.47.0 # For Vertex AI SDK, including RAG
+gunicorn>=20.0.0 # For serving the Flask app in Cloud Run
