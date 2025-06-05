@@ -1,58 +1,89 @@
-body {
-    font-family: Arial, sans-serif;
-    margin: 20px;
-    background-color: #f4f4f4;
-    color: #333;
-    line-height: 1.6;
+/* Import Roboto font (optional, but good for Google look) */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+/* Basic Reset / Box Sizing */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
-.container {
-    background-color: #fff;
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f8f9fa; /* Light grey background */
+    color: #202124; /* Dark grey text */
+    line-height: 1.6;
     padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    max-width: 800px;
-    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.container { /* Assuming a main container div might wrap content in index.html, or apply to body */
+    width: 100%;
+    max-width: 800px; /* Control max width for readability */
+    margin: 0 auto;
 }
 
 h1 {
-    color: #333;
+    color: #1a73e8; /* Google Blue */
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
+    font-weight: 500;
 }
 
-h2 {
-    color: #555;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 5px;
-    margin-top: 30px;
+/* Forms and Fieldsets (styled like cards) */
+fieldset {
+    background-color: #ffffff; /* White background for "cards" */
+    border: 1px solid #dadce0; /* Light grey border */
+    border-radius: 8px;
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.08); /* Subtle shadow */
 }
 
-.form-section {
-    background-color: #f9f9f9;
-    padding: 15px;
-    margin-bottom: 20px;
-    border-radius: 5px;
-    border: 1px solid #e0e0e0;
+legend {
+    font-size: 1.4em;
+    font-weight: 500;
+    color: #1a73e8; /* Google Blue */
+    margin-bottom: 16px;
+    padding: 0 8px;
 }
 
+hr {
+    border: none;
+    border-top: 1px solid #e0e0e0;
+    margin: 24px 0;
+}
+
+/* Form Elements */
 label {
     display: block;
+    font-weight: 500;
+    color: #3c4043;
     margin-bottom: 8px;
-    font-weight: bold;
-    color: #444;
 }
 
 input[type="text"],
 input[type="file"],
-select,
-textarea {
-    width: calc(100% - 22px); /* Account for padding and border */
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
+textarea,
+select {
+    width: 100%;
+    padding: 10px 12px;
+    margin-bottom: 16px;
+    border: 1px solid #dadce0;
     border-radius: 4px;
-    box-sizing: border-box; /* Important for width calculation */
+    font-family: 'Roboto', sans-serif;
+    font-size: 1em;
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+input[type="text"]:focus,
+textarea:focus,
+select:focus {
+    border-color: #1a73e8; /* Google Blue focus */
+    box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2); /* Subtle focus ring */
+    outline: none;
 }
 
 textarea {
@@ -60,91 +91,144 @@ textarea {
     resize: vertical;
 }
 
-input[type="submit"] {
-    background-color: #007bff;
+button,
+input[type="submit"] { /* If using input type submit anywhere */
+    background-color: #1a73e8; /* Google Blue */
     color: white;
-    padding: 12px 20px;
     border: none;
+    padding: 10px 20px;
     border-radius: 4px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 1em;
+    font-weight: 500;
     cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.2s ease-in-out;
+    text-transform: uppercase; /* Common for Material buttons */
 }
 
+button:hover,
 input[type="submit"]:hover {
-    background-color: #0056b3;
+    background-color: #185abc; /* Darker blue on hover */
 }
 
-/* Flash messages styling */
+button:disabled,
+input[type="submit"]:disabled {
+    background-color: #e0e0e0;
+    color: #9e9e9e;
+    cursor: not-allowed;
+}
+
+/* Flashed Messages */
 .flashes {
     list-style: none;
     padding: 0;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
+    width: 100%;
 }
 
 .flashes li {
-    padding: 12px;
+    padding: 12px 16px;
     margin-bottom: 10px;
     border-radius: 4px;
-    font-size: 15px;
+    font-weight: 500;
 }
 
-.flash-success {
-    background-color: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
+.flashes .success, .flash-success { /* Added .flash-success for direct class usage */
+    background-color: #e6f4ea; /* Light green */
+    color: #1e8e3e;
+    border: 1px solid #a8d8b6;
 }
 
-.flash-error {
-    background-color: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
+.flashes .error, .flash-error { /* Added .flash-error */
+    background-color: #fce8e6; /* Light red */
+    color: #d93025;
+    border: 1px solid #f5b9b4;
 }
 
-.flash-info {
-    background-color: #cce5ff;
-    color: #004085;
-    border: 1px solid #b8daff;
+.flashes .info, .flash-info { /* Added .flash-info */
+    background-color: #e8f0fe; /* Light blue */
+    color: #1967d2;
+    border: 1px solid #a9c9fb;
 }
-.flash-warning {
-    background-color: #fff3cd;
-    color: #856404;
-    border: 1px solid #ffeeba;
-}
-
-
-#self_deployed_fields {
-    background-color: #f0f0f0;
-    border: 1px dashed #bbb;
-    padding: 15px;
-    margin-top: 10px;
-    border-radius: 4px;
+.flashes .warning, .flash-warning { /* Added .flash-warning */
+    background-color: #feefc3; /* Light yellow */
+    color: #b06000; /* Darker yellow/orange for text */
+    border: 1px solid #fcdca0;
 }
 
-#self_deployed_fields h3 {
-    margin-top: 0;
-    color: #333;
-}
 
+/* Response Area */
 #response_area {
-    background-color: #e9ecef;
-    border: 1px solid #ced4da;
-    padding: 15px;
-    min-height: 150px;
+    background-color: #f1f3f4; /* Slightly different light grey */
+    border: 1px solid #dadce0;
+    border-radius: 8px;
+    padding: 16px;
+    margin-top: 16px;
+    white-space: pre-wrap; /* Preserve line breaks and spaces */
+    word-wrap: break-word;
+    font-family: 'Menlo', 'Monaco', 'Consolas', monospace; /* Monospace for code-like output */
+    font-size: 0.95em;
+    min-height: 100px;
+    width: 100%;
+}
+
+#response_area:empty::before { /* Placeholder for empty response area */
+    content: "Model response will appear here...";
+    color: #5f6368;
+}
+
+
+/* Specific sections if needed */
+.upload-status, .model-params-conditional { /* .status-display from HTML can use this too */
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #e8f0fe; /* Light blue info box */
     border-radius: 4px;
-    white-space: pre-wrap; /* Preserve formatting of the response */
-    font-family: "Courier New", Courier, monospace;
+    font-size: 0.9em;
 }
 
-#response_area p:first-child {
-    margin-top: 0;
+.upload-status p, .model-params-conditional p {
+    margin: 0;
 }
-#response_area p:last-child {
-    margin-bottom: 0;
+.upload-status strong {
+    color: #1967d2;
 }
 
-/* Helper for required fields if JS adds it */
-.required-label::after {
-    content: " *";
-    color: red;
+/* Hide conditional fields by default - JS controls display: block/none */
+#self_deployed_fields {
+    /* display: none; /* JavaScript will control this, but initial state set in HTML */
+    /* Add some styling for when it's visible */
+    padding-left: 10px;
+    border-left: 3px solid #1a73e8;
+    margin-top: 10px;
+    background-color: #f8f9fa; /* Slightly different background for this section */
 }
+
+button.button-primary { /* Explicit class for main action buttons if needed beyond default button styling */
+    /* Already covered by general button style, but can be used for overrides */
+}
+
+.status-display { /* Class used in index.html for uploaded_gcs_uri display */
+    margin-top: 15px;
+    padding: 10px;
+    background-color: #e8f0fe;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+.status-display p {
+    margin: 5px 0;
+}
+.status-display strong {
+     color: #1967d2;
+}
+
+/* Ensure main container div in index.html uses this class if not body */
+/* .container { ... } */
+/* If there's no main .container div in index.html, these properties from .container should be on body or a wrapper */
+/* For example, if body is the main container: */
+/* body { ... max-width: 800px; margin: 0 auto; ...} */
+/* The current body style is flex, which is fine for centering a single .container child. */
+/* If .container div is removed from index.html, body needs max-width and margin:auto for centering content. */
+/* The current index.html has a .container div, so this is fine. */The `static/css/style.css` file has been updated with the new Google AI Studio-inspired CSS. I've also made sure to add `.flash-<category>` to the CSS selectors for flashed messages to match the classes used in `index.html`.
+
+This subtask is complete. I will submit the report.
