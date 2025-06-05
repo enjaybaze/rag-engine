@@ -1,4 +1,4 @@
-/* Import Roboto font (optional, but good for Google look) */
+/* Import Roboto font */
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 
 /* Basic Reset / Box Sizing */
@@ -10,8 +10,8 @@
 
 body {
     font-family: 'Roboto', sans-serif;
-    background-color: #f8f9fa; /* Light grey background */
-    color: #202124; /* Dark grey text */
+    background-color: #202124; /* Dark grey background */
+    color: #e8eaed; /* Light grey/off-white text */
     line-height: 1.6;
     padding: 20px;
     display: flex;
@@ -19,14 +19,14 @@ body {
     align-items: center;
 }
 
-.container { /* Assuming a main container div might wrap content in index.html, or apply to body */
+.container {
     width: 100%;
-    max-width: 800px; /* Control max width for readability */
+    max-width: 800px;
     margin: 0 auto;
 }
 
 h1 {
-    color: #1a73e8; /* Google Blue */
+    color: #89b4f8; /* Brighter Blue accent for dark theme */
     text-align: center;
     margin-bottom: 24px;
     font-weight: 500;
@@ -34,25 +34,26 @@ h1 {
 
 /* Forms and Fieldsets (styled like cards) */
 fieldset {
-    background-color: #ffffff; /* White background for "cards" */
-    border: 1px solid #dadce0; /* Light grey border */
+    background-color: #2d2e30; /* Slightly lighter dark grey for "cards" */
+    border: 1px solid #5f6368; /* Medium dark grey border */
     border-radius: 8px;
     padding: 24px;
     margin-bottom: 24px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.08); /* Subtle shadow */
+    /* Box shadow might need adjustment for dark themes, often more subtle or replaced by border */
+    box-shadow: 0 1px 2px rgba(0,0,0,0.3), 0 2px 4px rgba(0,0,0,0.2); /* Adjusted shadow for dark */
 }
 
 legend {
     font-size: 1.4em;
     font-weight: 500;
-    color: #1a73e8; /* Google Blue */
+    color: #89b4f8; /* Brighter Blue accent */
     margin-bottom: 16px;
     padding: 0 8px;
 }
 
 hr {
     border: none;
-    border-top: 1px solid #e0e0e0;
+    border-top: 1px solid #5f6368; /* Medium dark grey */
     margin: 24px 0;
 }
 
@@ -60,7 +61,7 @@ hr {
 label {
     display: block;
     font-weight: 500;
-    color: #3c4043;
+    color: #9aa0a6; /* Secondary text color (medium grey) */
     margin-bottom: 8px;
 }
 
@@ -71,18 +72,25 @@ select {
     width: 100%;
     padding: 10px 12px;
     margin-bottom: 16px;
-    border: 1px solid #dadce0;
+    background-color: #3c4043; /* Darker background for inputs */
+    color: #e8eaed; /* Light text for inputs */
+    border: 1px solid #5f6368; /* Medium dark grey border */
     border-radius: 4px;
     font-family: 'Roboto', sans-serif;
     font-size: 1em;
     transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
+input[type="file"] { /* File input text color can be tricky, browser dependent */
+    color-scheme: dark; /* Helps with some browser styling of file input button */
+}
+
+
 input[type="text"]:focus,
 textarea:focus,
 select:focus {
-    border-color: #1a73e8; /* Google Blue focus */
-    box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2); /* Subtle focus ring */
+    border-color: #89b4f8; /* Brighter Blue accent focus */
+    box-shadow: 0 0 0 2px rgba(137, 180, 248, 0.3); /* Subtle focus ring with accent */
     outline: none;
 }
 
@@ -92,9 +100,9 @@ textarea {
 }
 
 button,
-input[type="submit"] { /* If using input type submit anywhere */
-    background-color: #1a73e8; /* Google Blue */
-    color: white;
+input[type="submit"] {
+    background-color: #89b4f8; /* Brighter Blue accent */
+    color: #202124; /* Dark text for contrast on bright blue button */
     border: none;
     padding: 10px 20px;
     border-radius: 4px;
@@ -102,19 +110,19 @@ input[type="submit"] { /* If using input type submit anywhere */
     font-size: 1em;
     font-weight: 500;
     cursor: pointer;
-    transition: background-color 0.2s ease-in-out;
-    text-transform: uppercase; /* Common for Material buttons */
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+    text-transform: uppercase;
 }
 
 button:hover,
 input[type="submit"]:hover {
-    background-color: #185abc; /* Darker blue on hover */
+    background-color: #a3c5f9; /* Lighter blue on hover */
 }
 
 button:disabled,
 input[type="submit"]:disabled {
-    background-color: #e0e0e0;
-    color: #9e9e9e;
+    background-color: #3c4043; /* Dark grey disabled BG */
+    color: #5f6368;    /* Muted text for disabled */
     cursor: not-allowed;
 }
 
@@ -131,104 +139,87 @@ input[type="submit"]:disabled {
     margin-bottom: 10px;
     border-radius: 4px;
     font-weight: 500;
+    border-width: 1px;
+    border-style: solid;
 }
 
-.flashes .success, .flash-success { /* Added .flash-success for direct class usage */
-    background-color: #e6f4ea; /* Light green */
-    color: #1e8e3e;
-    border: 1px solid #a8d8b6;
+.flashes .success, .flash-success {
+    background-color: #1e3d2a; /* Dark Green BG */
+    color: #a5d6a7;           /* Light Green text */
+    border-color: #285338;    /* Slightly darker green border */
 }
 
-.flashes .error, .flash-error { /* Added .flash-error */
-    background-color: #fce8e6; /* Light red */
-    color: #d93025;
-    border: 1px solid #f5b9b4;
+.flashes .error, .flash-error {
+    background-color: #4d1f1c; /* Dark Red BG */
+    color: #f8a9a4;           /* Light Red/Pink text */
+    border-color: #6b2b27;    /* Slightly darker red border */
 }
 
-.flashes .info, .flash-info { /* Added .flash-info */
-    background-color: #e8f0fe; /* Light blue */
-    color: #1967d2;
-    border: 1px solid #a9c9fb;
+.flashes .info, .flash-info {
+    background-color: #1c2e4a; /* Dark Blue BG */
+    color: #a8c7fa;           /* Light Blue text */
+    border-color: #2a446e;    /* Slightly darker blue border */
 }
-.flashes .warning, .flash-warning { /* Added .flash-warning */
-    background-color: #feefc3; /* Light yellow */
-    color: #b06000; /* Darker yellow/orange for text */
-    border: 1px solid #fcdca0;
+.flashes .warning, .flash-warning {
+    background-color: #4a3715; /* Dark Yellow/Orange BG */
+    color: #fdd663;           /* Light Yellow text */
+    border-color: #6e5321;    /* Slightly darker yellow/orange border */
 }
 
 
 /* Response Area */
 #response_area {
-    background-color: #f1f3f4; /* Slightly different light grey */
-    border: 1px solid #dadce0;
+    background-color: #2d2e30; /* Slightly lighter dark grey, same as cards */
+    border: 1px solid #5f6368; /* Medium dark grey border */
     border-radius: 8px;
     padding: 16px;
     margin-top: 16px;
-    white-space: pre-wrap; /* Preserve line breaks and spaces */
+    color: #e8eaed; /* Light text for response */
+    white-space: pre-wrap;
     word-wrap: break-word;
-    font-family: 'Menlo', 'Monaco', 'Consolas', monospace; /* Monospace for code-like output */
+    font-family: 'Menlo', 'Monaco', 'Consolas', monospace;
     font-size: 0.95em;
     min-height: 100px;
     width: 100%;
 }
 
-#response_area:empty::before { /* Placeholder for empty response area */
+#response_area:empty::before {
     content: "Model response will appear here...";
-    color: #5f6368;
+    color: #9aa0a6; /* Secondary text color for placeholder */
 }
 
-
-/* Specific sections if needed */
-.upload-status, .model-params-conditional { /* .status-display from HTML can use this too */
+/* Specific sections styling for dark theme if needed */
+.upload-status, .status-display, .model-params-conditional { /* Combined .upload-status and .status-display */
     margin-top: 10px;
     padding: 10px;
-    background-color: #e8f0fe; /* Light blue info box */
+    background-color: #1c2e4a; /* Dark Blue info box, same as .flashes .info */
+    color: #a8c7fa;
     border-radius: 4px;
     font-size: 0.9em;
 }
 
-.upload-status p, .model-params-conditional p {
-    margin: 0;
+.upload-status p, .status-display p, .model-params-conditional p {
+    margin: 5px 0; /* Adjusted for consistency */
 }
-.upload-status strong {
-    color: #1967d2;
+.upload-status strong, .status-display strong {
+    color: #d1e3ff; /* Brighter for emphasis within the info box */
 }
 
-/* Hide conditional fields by default - JS controls display: block/none */
 #self_deployed_fields {
-    /* display: none; /* JavaScript will control this, but initial state set in HTML */
-    /* Add some styling for when it's visible */
     padding-left: 10px;
-    border-left: 3px solid #1a73e8;
+    border-left: 3px solid #89b4f8; /* Brighter Blue accent for border */
     margin-top: 10px;
-    background-color: #f8f9fa; /* Slightly different background for this section */
+    background-color: #202124; /* Match body background for nested section */
 }
 
-button.button-primary { /* Explicit class for main action buttons if needed beyond default button styling */
-    /* Already covered by general button style, but can be used for overrides */
+button.button-primary { /* Ensure main action buttons adhere to dark theme if specific overrides were used */
+    background-color: #89b4f8;
+    color: #202124;
 }
 
-.status-display { /* Class used in index.html for uploaded_gcs_uri display */
-    margin-top: 15px;
-    padding: 10px;
-    background-color: #e8f0fe;
-    border-radius: 4px;
-    font-size: 0.9em;
+button.button-primary:hover {
+    background-color: #a3c5f9;
 }
-.status-display p {
-    margin: 5px 0;
-}
-.status-display strong {
-     color: #1967d2;
-}
-
-/* Ensure main container div in index.html uses this class if not body */
-/* .container { ... } */
-/* If there's no main .container div in index.html, these properties from .container should be on body or a wrapper */
-/* For example, if body is the main container: */
-/* body { ... max-width: 800px; margin: 0 auto; ...} */
-/* The current body style is flex, which is fine for centering a single .container child. */
-/* If .container div is removed from index.html, body needs max-width and margin:auto for centering content. */
-/* The current index.html has a .container div, so this is fine. */The `static/css/style.css` file has been updated with the new Google AI Studio-inspired CSS. I've also made sure to add `.flash-<category>` to the CSS selectors for flashed messages to match the classes used in `index.html`.
+The `static/css/style.css` file has been updated with the new dark theme CSS. The styling aligns with the provided specifications for a Google AI Studio-inspired dark theme.
 
 This subtask is complete. I will submit the report.
