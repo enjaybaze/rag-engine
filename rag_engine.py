@@ -180,7 +180,7 @@ def query_rag_corpus(
     rag_model = None
     try:
         if model_choice == 'gemini':
-            model_name = "gemini-1.5-flash-001"
+            model_name = "gemini-2.0-flash-001"
             print(f"Using Gemini model: {model_name}")
             rag_model = GenerativeModel(model_name=model_name, tools=[rag_retrieval_tool])
         elif model_choice == 'self-deployed':
