@@ -204,7 +204,7 @@ def query_rag_corpus(
             # For now, assume the initial _initialize_vertex_ai was sufficient or params match.
             # Removed debug print statements that were here.
             rag_model = GenerativeModel(
-                endpoint_str,
+                dedicated_domain,
                 tools=[rag_retrieval_tool]
             )
         else:
