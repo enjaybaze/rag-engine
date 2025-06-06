@@ -188,8 +188,8 @@ def query_rag_corpus(
                 return None, "Missing self_deployed_params (Project ID, Location, Endpoint ID) for self-deployed model."
 
             endpoint_str = (
-                f"projects/{self_deployed_params['PROJECT_ID']}/locations/"
-                f"{self_deployed_params['LOCATION']}/endpoints/{self_deployed_params['ENDPOINT_ID']}"
+                f"{self_deployed_params['ENDPOINT_ID']}.{self_deployed_params['LOCATION']}-{self_deployed_params['PROJECT_ID']}"
+                f".prediction.vertexai.goog"
             )
             print(f"Using self-deployed model endpoint: {endpoint_str}")
 
@@ -205,8 +205,7 @@ def query_rag_corpus(
             # Removed debug print statements that were here.
             rag_model = GenerativeModel(
                 endpoint_str,
-                tools=[rag_retrieval_tool],
-                client_options=client_options
+                tools=[rag_retrieval_tool]
             )
         else:
             return None, f"Invalid model_choice: {model_choice}. Must be 'gemini' or 'self-deployed'."
