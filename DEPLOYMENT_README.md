@@ -265,4 +265,10 @@ This section describes how to deploy the application to Google Cloud Run, a serv
 *   **Self-Deployed Endpoint Issues**:
     *   If using the "Self-Deployed (Vertex AI Endpoint)" option, ensure the Project ID, Location, and Endpoint ID are correct and that the endpoint is active and accessible by the service account.
 
+*   **Dedicated Endpoint Domain for Self-Deployed Models**:
+    *   When configuring a "Self-Deployed (Vertex AI Endpoint)" model in the UI, you will see an optional field: **"Dedicated Endpoint Domain (Optional)"**.
+    *   You should fill this field if your Vertex AI Endpoint is a **dedicated endpoint** and you encounter a `400` error message similar to: *"Dedicated Endpoint cannot be accessed through the shared Vertex AI domain aiplatform.googleapis.com. Please access the endpoint using its dedicated domain name 'your-endpoint-specific-domain.prediction.vertexai.goog'"*.
+    *   **Where to find it:** The required dedicated domain name is usually provided in the error message itself, or you can find it in the details of your deployed Vertex AI Endpoint in the Google Cloud Console (look for prediction URIs or similar).
+    *   **When to use it:** Only if you get the specific error mentioned above. For many standard endpoints or when using the default shared domain, this field can be left blank.
+
 **(Further sections on advanced Cloud Run configurations or other deployment methods can be added below.)**

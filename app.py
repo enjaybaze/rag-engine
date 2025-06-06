@@ -128,9 +128,10 @@ def submit_prompt():
     # Store form values in session to repopulate
     session['model_type_selected'] = request.form.get('model_type', 'gemini')
     session['prompt_input_value'] = request.form.get('prompt_input', '')
-    session['sd_project_id'] = request.form.get('project_id', '') # For self-deployed model
-    session['sd_location'] = request.form.get('location', '')     # For self-deployed model
-    session['sd_endpoint_id'] = request.form.get('endpoint_id', '') # For self-deployed model
+    session['sd_project_id'] = request.form.get('project_id', '')      # For self-deployed model
+    session['sd_location'] = request.form.get('location', '')          # For self-deployed model
+    session['sd_endpoint_id'] = request.form.get('endpoint_id', '')    # For self-deployed model
+    session['sd_domain_value'] = request.form.get('sd_domain', '').strip() # New dedicated domain field
 
     model_choice = session['model_type_selected']
     user_prompt = session['prompt_input_value']
@@ -146,19 +147,24 @@ def submit_prompt():
         sd_project = session['sd_project_id']
         sd_location = session['sd_location']
         sd_endpoint = session['sd_endpoint_id']
+        sd_domain = session['sd_domain_value'] # Retrieve new domain from session
 
-        if not all([sd_project, sd_location, sd_endpoint]):
+        if not all([sd_project, sd_location, sd_endpoint]): # Domain is optional, not checked here
             flash('Project ID, Location, and Endpoint ID are required for self-deployed models.', 'error')
             return redirect(url_for('index'))
 
         self_deployed_params_dict = {
             'PROJECT_ID': sd_project,
             'LOCATION': sd_location,
-            'ENDPOINT_ID': sd_endpoint
+            'ENDPOINT_ID': sd_endpoint,
+            'DEDICATED_DOMAIN': sd_domain if sd_domain else None # Add new domain
         }
         # If self-deployed model uses a different project for its endpoint,
         # that's handled by self_deployed_params. query_project_id/location are for corpus.
-        flash(f"Querying with Self-Deployed model: Endpoint Project={sd_project}, Location={sd_location}, Endpoint ID={sd_endpoint}", "info")
+        flash_msg = f"Querying with Self-Deployed model: Endpoint Project={sd_project}, Location={sd_location}, Endpoint ID={sd_endpoint}"
+        if sd_domain:
+            flash_msg += f", Domain={sd_domain}"
+        flash(flash_msg, "info")
     elif model_choice == 'gemini':
         flash("Querying with Gemini (Vertex AI) model.", "info")
     else:

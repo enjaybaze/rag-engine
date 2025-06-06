@@ -192,11 +192,22 @@ def query_rag_corpus(
                 f"{self_deployed_params['LOCATION']}/endpoints/{self_deployed_params['ENDPOINT_ID']}"
             )
             print(f"Using self-deployed model endpoint: {endpoint_str}")
+
+            dedicated_domain = self_deployed_params.get('DEDICATED_DOMAIN')
+            client_options = None
+            if dedicated_domain:
+                client_options = {"api_endpoint": dedicated_domain}
+                print(f"Using client_options with dedicated_domain: {dedicated_domain} for self-deployed model.")
+
             # Ensure the project_id for the self-deployed endpoint's vertexai.init call is handled
             # if it's different from the main one. _initialize_vertex_ai could be enhanced or called again.
             # For now, assume the initial _initialize_vertex_ai was sufficient or params match.
             # Removed debug print statements that were here.
-            rag_model = GenerativeModel(endpoint_str, tools=[rag_retrieval_tool])
+            rag_model = GenerativeModel(
+                endpoint_str,
+                tools=[rag_retrieval_tool],
+                client_options=client_options
+            )
         else:
             return None, f"Invalid model_choice: {model_choice}. Must be 'gemini' or 'self-deployed'."
     except Exception as e_model_init:

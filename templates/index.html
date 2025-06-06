@@ -74,6 +74,13 @@
                         <label for="endpoint_id">Vertex AI Endpoint ID:</label>
                         <input type="text" name="endpoint_id" id="endpoint_id" value="{{ sd_endpoint_id if sd_endpoint_id else '' }}" placeholder="e.g., 1234567890123456789">
                     </div>
+                    <div>
+                        <label for="sd_domain">Dedicated Endpoint Domain (Optional):</label>
+                        <input type="text" name="sd_domain" id="sd_domain" value="{{ session.get('sd_domain_value', '') }}" placeholder="e.g., 123...long-id.us-central1-123...project-num.prediction.vertexai.goog">
+                        <p style="font-size: 0.8em; color: #9aa0a6; margin-top: -12px; margin-bottom: 16px;">
+                            Required if your endpoint is dedicated and you see errors about shared domains. Find in Vertex AI Endpoint details or error messages.
+                        </p>
+                    </div>
                 </div>
             </fieldset>
 
