@@ -56,7 +56,7 @@ Before you begin, ensure you have the following installed:
 5.  **Set Environment Variables**:
     The application requires several environment variables to be set to function correctly.
 
-    *   `PROJECT_ID`: Your Google Cloud Project ID where Vertex AI services will be used and (potentially) where the GCS bucket resides.
+    *   `GOOGLE_CLOUD_PROJECT`: Your Google Cloud Project ID where Vertex AI services will be used and (potentially) where the GCS bucket resides.
     *   `VERTEX_AI_LOCATION`: The Google Cloud region for Vertex AI services (e.g., `us-central1`). The application defaults to `us-central1` if this is not set, but explicitly setting it is good practice.
     *   `GCS_BUCKET_NAME`: The name of the Google Cloud Storage bucket that the application will use to upload documents for the RAG corpus. **You must create this bucket manually in your GCP project if it doesn't exist.**
     *   `GCS_DESTINATION_FOLDER`: The folder path within your GCS bucket where uploaded files will be stored (e.g., `rag_uploads/`). The `app.py` uses `my_files_dir/` as a default if this is not set, but explicitly setting it is recommended.
@@ -66,7 +66,7 @@ Before you begin, ensure you have the following installed:
 
     *   On macOS and Linux (bash/zsh):
         ```bash
-        export PROJECT_ID="your-gcp-project-id"
+        export GOOGLE_CLOUD_PROJECT="your-gcp-project-id"
         export VERTEX_AI_LOCATION="us-central1" # Or your preferred region
         export GCS_BUCKET_NAME="your-unique-gcs-bucket-name"
         export GCS_DESTINATION_FOLDER="rag_uploads/"
@@ -76,7 +76,7 @@ Before you begin, ensure you have the following installed:
 
     *   On Windows (Command Prompt):
         ```cmd
-        set PROJECT_ID="your-gcp-project-id"
+        set GOOGLE_CLOUD_PROJECT="your-gcp-project-id"
         set VERTEX_AI_LOCATION="us-central1"
         set GCS_BUCKET_NAME="your-unique-gcs-bucket-name"
         set GCS_DESTINATION_FOLDER="rag_uploads/"
@@ -84,7 +84,7 @@ Before you begin, ensure you have the following installed:
         ```
     *   On Windows (PowerShell):
         ```powershell
-        $env:PROJECT_ID="your-gcp-project-id"
+        $env:GOOGLE_CLOUD_PROJECT="your-gcp-project-id"
         $env:VERTEX_AI_LOCATION="us-central1"
         $env:GCS_BUCKET_NAME="your-unique-gcs-bucket-name"
         $env:GCS_DESTINATION_FOLDER="rag_uploads/"
@@ -182,7 +182,7 @@ This section describes how to deploy the application to Google Cloud Run, a serv
       --platform managed \
       --region YOUR_REGION \
       --allow-unauthenticated \
-      --set-env-vars PROJECT_ID="YOUR_PROJECT_ID" \
+      --set-env-vars GOOGLE_CLOUD_PROJECT="YOUR_PROJECT_ID" \
       --set-env-vars VERTEX_AI_LOCATION="YOUR_REGION" \
       --set-env-vars GCS_BUCKET_NAME="your-gcs-bucket-name" \
       --set-env-vars GCS_DESTINATION_FOLDER="your-gcs-folder" \

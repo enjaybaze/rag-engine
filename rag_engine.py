@@ -195,6 +195,22 @@ def query_rag_corpus(
             # Ensure the project_id for the self-deployed endpoint's vertexai.init call is handled
             # if it's different from the main one. _initialize_vertex_ai could be enhanced or called again.
             # For now, assume the initial _initialize_vertex_ai was sufficient or params match.
+
+            print(f"DEBUG: ---- Debugging GenerativeModel ----")
+            print(f"DEBUG: vertexai module path: {vertexai.__file__}")
+            print(f"DEBUG: GenerativeModel type: {type(GenerativeModel)}")
+            try:
+                # Attempt to get module path for GenerativeModel
+                gm_module = GenerativeModel.__module__
+                gm_name = GenerativeModel.__name__
+                print(f"DEBUG: GenerativeModel module.name: {gm_module}.{gm_name}")
+                if hasattr(GenerativeModel, '__file__'): # Some built-in types might not have __file__
+                    print(f"DEBUG: GenerativeModel __file__ (if available): {GenerativeModel.__file__}")
+            except AttributeError as e_debug_attr:
+                print(f"DEBUG: Could not get all module info for GenerativeModel: {e_debug_attr}")
+            print(f"DEBUG: Attributes of GenerativeModel: {dir(GenerativeModel)}")
+            print(f"DEBUG: ---- End Debugging GenerativeModel ----")
+
             rag_model = GenerativeModel.from_vertex_endpoint(
                 endpoint_name=endpoint_str, tools=[rag_retrieval_tool]
             )
