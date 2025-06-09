@@ -205,8 +205,7 @@ def query_rag_corpus(
             # Removed debug print statements that were here.
             rag_model = GenerativeModel(
                 endpoint_str,
-                tools=[rag_retrieval_tool],
-                client_options=client_options
+                tools=[rag_retrieval_tool]
             )
         else:
             return None, f"Invalid model_choice: {model_choice}. Must be 'gemini' or 'self-deployed'."
